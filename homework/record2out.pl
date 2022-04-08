@@ -7,7 +7,7 @@ foreach (glob "../list/*_office.csv") {
     my ($name) = (split m/\//)[-1];
     ($name) = split '_', $name;
     print "$name\n";
-    open (OUT, "> ${name}_homework.csv") or die;
+    open (OUT, "> ${name}_out.csv") or die;
     print OUT "学号,姓名,班级,1,2,3,4,5,6,7,8,9,\n";
     foreach my $id (@students) {
         my @data;
