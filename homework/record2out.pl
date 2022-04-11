@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-foreach (glob "../list/*_office.csv") {
+foreach (glob "../list/*_official.csv") {
     my @students = info_office($_);
     my ($name) = (split m/\//)[-1];
     ($name) = split '_', $name;
