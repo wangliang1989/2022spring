@@ -16,7 +16,7 @@ foreach (<IN>) {
     chomp;
     my ($id, $name, $class) = split m/\s+/;
     my $i = 0;
-    foreach my $file (glob "../list/*_office.csv") {
+    foreach my $file (glob "../list/*_official.csv") {
         open (IN1, "< $file") or die;
         foreach (<IN1>) {
             $i = 1 if $_ =~ $id;
