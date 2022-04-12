@@ -3,26 +3,28 @@ use strict;
 use warnings;
 
 foreach (glob "../list/*_official.csv") {
-    my @students = info_office($_);
     my ($name) = (split m/\//)[-1];
     ($name) = split '_', $name;
     print "$name\n";
+    my @students = info_office($_);
+    open (IN, "< ${name}_record.csv") or die;
+    my @record = <IN>;
+    close(IN);
     open (OUT, "> ${name}_out.csv") or die;
     print OUT "学号,姓名,班级,1,2,3,4,5,6,7,8,9,\n";
-    foreach my $id (@students) {
+    foreach (@students) {
+        my ($id) = split ',';
         my @data;
-        open (IN, "< ${name}_record.csv") or die;
-        foreach (<IN>) {
+        foreach (@record) {
             chomp;
             next unless $_ =~ $id;
             my (undef, undef, undef, @info) = split ',';
             foreach (@info) {
-                push @data, $_ unless ",$_," eq ",,";
+                push @data, $_;
             }
         }
-        close(IN);
         my $score = join(',', @data);
-        print OUT "$id,$score\n";
+        print OUT "$_,$score\n";
     }
     close(OUT);
 }
