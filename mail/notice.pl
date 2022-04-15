@@ -20,7 +20,7 @@ foreach my $file (glob "../homework/*_out.csv") {
         my ($id, $name, $class, @score) = split ',';
         my $i = 0;
         foreach (@score) {
-            next unless ($_ == $_ + 0);
+            #next unless ($_ == $_ + 0);
             $i++;
             my $txt = "          第${i}次: $_\n";
             if (defined($homework{$id})) {
@@ -54,7 +54,19 @@ foreach (<IN>) {
 }
 close(IN);
 my %finalexam;# 读入期考成绩
+my @white;# 读入需要发邮件的学号
+open (IN, "< ../list/white_list.csv") or die;
+foreach (<IN>) {
+    chomp;
+    push @white, $_;
+}
+close(IN);
 foreach my $id (keys %official) {
+    my $i = 0;
+    foreach (@white) {
+        $i++ if $id eq $_;
+    }
+    next if $i == 0;
     my ($day1, $day2) = getday();
     my ($name, $class) = split m/\s+/, $official{$id};
     mkdir $day1;

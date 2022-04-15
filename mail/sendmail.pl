@@ -32,21 +32,6 @@ foreach (<PRI>) {
 }
 close(PRI);
 
-# 设定发信参数
-my $smtp = Net::SMTP->new(
-    Host    =>   $host,
-    Timeout =>   30,
-    Debug   =>   1,
-);
-# 登录
-$smtp -> command ('AUTH LOGIN') -> response ();
-my $userpass = encode_base64 ($sender);
-chomp ($userpass);
-$smtp -> command ($userpass) -> response();
-$userpass = encode_base64 ($passwd);
-chomp ($userpass);
-$smtp -> command ($userpass) -> response();
-# 发送邮件
 chdir $dir or die;
 foreach (glob "*.*.*") {
     my ($id, $day, $q) = split m/\./;
@@ -59,6 +44,21 @@ foreach (glob "*.*.*") {
         close(OUT);
         next;
     }
+    # 设定发信参数
+    my $smtp = Net::SMTP->new(
+        Host    =>   $host,
+        Timeout =>   30,
+        Debug   =>   1,
+    );
+    # 登录
+    $smtp -> command ('AUTH LOGIN') -> response ();
+    my $userpass = encode_base64 ($sender);
+    chomp ($userpass);
+    $smtp -> command ($userpass) -> response();
+    $userpass = encode_base64 ($passwd);
+    chomp ($userpass);
+    $smtp -> command ($userpass) -> response();
+    # 发送邮件
     $smtp -> mail ($sender);
     $smtp -> to ($recipient);
     $smtp -> data ();
@@ -70,6 +70,6 @@ foreach (glob "*.*.*") {
     $smtp -> datasend($_) foreach (<IN>);
     close(IN);
     $smtp -> dataend();
-    last;
+    $smtp -> quit;
+    sleep(60);
 }
-$smtp -> quit;
