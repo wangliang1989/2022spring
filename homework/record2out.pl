@@ -18,7 +18,7 @@ foreach (glob "../list/*_official.csv") {
         foreach (@record) {
             chomp;
             next unless $_ =~ $id;
-            my (undef, undef, undef, @info) = split ',';
+            my (undef, undef, undef, @info) = split m/\s+/;
             foreach (@info) {
                 push @data, $_;
             }
