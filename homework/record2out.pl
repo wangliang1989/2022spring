@@ -23,8 +23,12 @@ foreach (glob "../list/*_official.csv") {
                 push @data, $_;
             }
         }
-        my $score = join(',', @data);
-        print OUT "$_,$score\n";
+        if (defined($data[0])) {
+            my $score = join(' ', @data);
+            print OUT "$_ $score\n";
+        }else{
+            print OUT "$_\n";
+        }
     }
     close(OUT);
 }
@@ -37,7 +41,7 @@ sub info_office {
         # 是否补修,电子邮箱,学号,姓名,性别,学院,年级,专业,班级,学生标记,辅修标记,是否重修,是否自修,手机号码
         next if $_ =~ '姓名';
         my @info = split ",";
-        push @out, "$info[2],$info[3],$info[8]";
+        push @out, "$info[2] $info[3] $info[8]";
     }
     close (IN);
     return @out;
