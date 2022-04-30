@@ -25,7 +25,7 @@ foreach my $file (glob "jg.*.csv") {
     close(IN);
     $file =~ s/csv/txt/g;
     open (OUT, "> $file") or die;
-    print OUT "$_ $times{$_} $scores{$_}\n" foreach (keys %times);
+    print OUT "$_ $times{$_} $scores{$_}\n" foreach (sort {$a cmp $b} keys %times);
     close(OUT);
 }
 sub origin2sec {
