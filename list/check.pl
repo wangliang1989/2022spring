@@ -10,6 +10,7 @@ foreach my $file (glob "*_official.csv") {
         my @info = split ",";
         $official{$info[2]} = "$info[3] $info[8]" unless $_ =~ '姓名';
     }
+    close (IN);
 }
 my %chaoxing;# 读入超星名单
 foreach my $file (glob "*_chaoxing.csv") {

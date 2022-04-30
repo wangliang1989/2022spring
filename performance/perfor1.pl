@@ -17,7 +17,7 @@ foreach my $file (glob "../list/*_official.csv") {
     my %factors;
     ($factors{$_}) = get_factor($_, $class) for (1, 2, 3, 4, 5, 6, 7, 8, 9);
     open (OUT, "> perfor1_$class.txt") or die;
-    open (IN, "< ../homework/${class}_out.csv") or die;
+    open (IN, "< ../homework/作业成绩_$class.csv") or die;
     foreach (<IN>) {
         chomp;
         if ($_ =~ '姓名') {
@@ -47,7 +47,7 @@ foreach my $file (glob "../list/*_official.csv") {
 sub get_factor{
     my ($i, $class) = @_;
     my $max = 0;
-    open (IN, "< ../homework/${class}_out.csv") or die;
+    open (IN, "< ../homework/作业成绩_$class.csv") or die;
     foreach (<IN>) {
         next if $_ =~ '姓名';
         #1810612066 鲍少兴 21电子1 100 95
