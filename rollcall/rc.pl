@@ -53,22 +53,28 @@ foreach (@data) {
     my $score = 100;
     my $absence = 0;
     my $strip = 0;
+    my $shijia = 0;
+    my $bingjia = 0;
     my $num = $num0;
     my @info = split m/\s+/;
     my ($id, $name, $class, @info1) = @info;
     foreach (@info1) {
         my ($day, $eq) = split "-";
+        next if $eq eq '事假（疫情）';#按照教务处要求，疫情不做考虑
         $num = $num - 1 if $event{$eq} == 0; # 减少考察次数
     }
     foreach (@info1) {
         my ($day, $eq) = split "-";
+        next if $eq eq '事假（疫情）';#按照教务处要求，疫情不做考虑
         $score = $score - (100 / $num) if $event{$eq} == 1; # 扣分
         $absence++ if $event{$eq} == 1;
         $strip++ if $event{$eq} == 2;
+        $shijia++ if $eq eq '病假';
+        $bingjia++ if $eq eq '事假';
     }
     $score = int ($score + 0.5);
-    print OUT "$id $name $class 缺勤 $absence 次,考勤分数为 $score\n" unless $score == 100;
+    print OUT "$id $name $class 缺勤 $absence 次, 事假 $shijia 次, 病假 $bingjia 次, 考勤分数为 $score\n" if $absence + $bingjia + $shijia > 0;
     print OUT "$id $name $class 需要补假条 $strip 次\n" if $strip > 0;
 }
-print OUT "其余同学满分\n";
+print OUT "其余同学100分\n";
 close(OUT);
