@@ -63,19 +63,26 @@ sub origin2sec {
 sub get_th{
     my ($i, @students) = @_;
     my $max = 0;
-    my @times;
-    foreach my $file (glob "jg.*.txt") {
-        open (IN, "< $file") or die;
-        foreach (<IN>) {
-            #刘仙华 2130612001 4 1653002380 95
-            my ($name, $id, $num, $time, undef) = split m/\s+/;
-            push @times, $time if $i == $num and grep{$_ eq $id} @students;
-        }
-        close(IN);
+    my %records;
+    open (IN, "< time/old.csv") or die;
+    foreach (<IN>) {
+        #刘仙华 2130612001 4 1653002380 95
+        my ($name, $id, $num, $origin, undef) = split m/\s+/;
+        next unless grep{$_ eq $id} @students;
+        next unless $num == $i;
+
+        my ($time) = origin2sec($origin);
+        $records{$id} = $time unless defined($records{$id});
+        $records{$id} = $time unless $records{$id} > $time;
     }
+    close(IN);
     my $median = 0;
     my $th = 0;
     my $j = 0;
+    my @times;
+    foreach (keys %records) {
+        push @times, $records{$_};
+    }
     foreach (sort {$a <=> $b} @times) {
         $j++;
         $th = $_ if $j <= 15;
