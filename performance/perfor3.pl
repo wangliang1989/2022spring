@@ -15,21 +15,21 @@ foreach my $file (glob "../list/*_official.csv") {
     }
     close(IN);
     my %records;
-    foreach my $file (glob "jg.*.txt") {
-        open (IN, "< $file") or die;
-        foreach (<IN>) {
-            #刘仙华 2130612001 4 1653002380 95
-            my ($name, $id, $num, $time, $score) = split m/\s+/;
-            next unless grep{$_ eq $id} keys %students;
-            next unless $num > 2 and $num < 10;
+    open (IN, "< ../homework/${class}_record.csv") or die;
+    foreach (<IN>) {
+        #2130612001 刘仙华 21电子1 100 99 100 100.100 100.100.95
+        my ($id, $name, undef, undef, undef, @scores) = split m/\s+/;
+        foreach (@scores) {
+            my (undef, $score) = split m/\./;
+            $score = 85 unless defined($score);
             if (defined($records{$id})) {
                 $records{$id} = "$records{$id} $score";
             }else{
                 $records{$id} = $score;
             }
         }
-        close(IN);
     }
+    close(IN);
     open (OUT, "> perfor3_$class.txt") or die;
     foreach (sort {$a <=> $b} keys %students) {
         print OUT "$students{$_} $records{$_}\n" if defined($records{$_});
