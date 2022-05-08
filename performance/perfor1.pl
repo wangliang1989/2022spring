@@ -20,16 +20,14 @@ foreach my $file (glob "../list/*_official.csv") {
     open (IN, "< ../homework/作业成绩_$class.csv") or die;
     foreach (<IN>) {
         chomp;
-        if ($_ =~ '姓名') {
-            print OUT "$_\n";
-            next;
-        }
+        next if ($_ =~ '姓名');
         my @info = split m/\s+/;
         my $record = "$info[0] $info[1] $info[2]";
         my $i = 0;
         foreach my $score (@info) {
             $i++;
             next if $i < 4;
+            $score = int $score;
             if ($score == -1) {
                 $record = "$record 40 40 40";
             }elsif ($score == 0) {
