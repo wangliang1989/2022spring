@@ -20,7 +20,7 @@ foreach (glob "../list/*_official.csv") {
             next unless $_ =~ $id;
             my (undef, undef, undef, @info) = split m/\s+/;
             foreach (@info) {
-                push @data, $_;
+                push @data, int $_;
             }
         }
         if (defined($data[0])) {
