@@ -25,11 +25,12 @@ foreach my $file (glob "../list/*_official.csv") {
     close(IN);
     open (OUT, "> 课堂表现_$class.txt") or die;
     foreach (sort {$a <=> $b} keys %students) {
-        print OUT "$students{$_}";
-        my ($i1) = getscore($_, @d1); print OUT " $i1" unless $i1 eq '-12345';
-        my ($i2) = getscore($_, @d2); print OUT " $i2" unless $i2 eq '-12345';
-        my ($i3) = getscore($_, @d3); print OUT " $i3" unless $i3 eq '-12345';
-        print OUT "\n";
+        my $word = $students{$_};
+        my ($i1) = getscore($_, @d1); chomp $i1; $word = "$word $i1" unless $i1 eq '-12345';
+        my ($i2) = getscore($_, @d2); chomp $i1; $word = "$word $i2" unless $i2 eq '-12345';
+        my ($i3) = getscore($_, @d3); chomp $i1; $word = "$word $i3" unless $i3 eq '-12345';
+        ($word) = trim($word);
+        print OUT "$word\n";
     }
     close(OUT);
 }
@@ -42,4 +43,9 @@ sub getscore{
         $out = join(' ', @info) if $_ =~ $id;
     }
     return ($out);
+}
+sub trim {
+    my $s = shift;
+    $s =~ s/^\s+|\s+$//g;
+    return $s;
 }
