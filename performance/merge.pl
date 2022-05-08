@@ -23,20 +23,26 @@ foreach my $file (glob "../list/*_official.csv") {
     open (IN, "< perfor3_$class.txt") or die;
     my @d3 = <IN>;
     close(IN);
+    open (IN, "< performance.txt") or die;
+    my @d4;
+    foreach (<IN>) {
+        push @d4, $_ unless $_ =~ '#';
+    }
+    close(IN);
     open (OUT, "> 课堂表现_$class.txt") or die;
     foreach (sort {$a <=> $b} keys %students) {
         my $word = $students{$_};
-        my ($i1) = getscore($_, @d1); chomp $i1; $word = "$word $i1" unless $i1 eq '-12345';
-        my ($i2) = getscore($_, @d2); chomp $i1; $word = "$word $i2" unless $i2 eq '-12345';
-        my ($i3) = getscore($_, @d3); chomp $i1; $word = "$word $i3" unless $i3 eq '-12345';
-        ($word) = trim($word);
+        my ($i1) = getscore($_, @d1); $word = "$word $i1"; ($word) = trim($word);
+        my ($i2) = getscore($_, @d2); $word = "$word $i2"; ($word) = trim($word);
+        my ($i3) = getscore($_, @d3); $word = "$word $i3"; ($word) = trim($word);
+        my ($i4) = getscore($_, @d4); $word = "$word $i4"; ($word) = trim($word);
         print OUT "$word\n";
     }
     close(OUT);
 }
 sub getscore{
     my ($id, @data) = @_;
-    my $out = -12345;
+    my $out = ' ';
     foreach (@data) {
         # 2130612001 刘仙华 21电子1 95 95
         my (undef, undef, undef, @info) = split m/\s+/;
