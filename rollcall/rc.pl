@@ -69,8 +69,8 @@ foreach (@data) {
         $score = $score - (100 / $num) if $event{$eq} == 1; # 扣分
         $absence++ if $event{$eq} == 1;
         $strip++ if $event{$eq} == 2;
-        $shijia++ if $eq eq '病假';
-        $bingjia++ if $eq eq '事假';
+        $shijia++ if $eq eq '事假';
+        $bingjia++ if $eq eq '病假';
     }
     $score = int ($score + 0.5);
     print OUT "$id $name $class 缺勤 $absence 次, 事假 $shijia 次, 病假 $bingjia 次, 考勤分数为 $score\n" if $absence + $bingjia + $shijia > 0;
