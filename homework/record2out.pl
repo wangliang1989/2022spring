@@ -10,7 +10,7 @@ foreach (glob "../list/*_official.csv") {
     open (IN, "< ${name}_record.csv") or die;
     my @record = <IN>;
     close(IN);
-    open (OUT, "> 作业成绩_$name.csv") or die;
+    open (OUT, "> 作业成绩_$name.txt") or die;
     print OUT "学号,姓名,班级,1,2,3,4,5,6,7,8,9,\n";
     foreach (@students) {
         my ($id) = split m/\s+/;
