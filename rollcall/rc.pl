@@ -9,6 +9,7 @@ my %event = ('事假（自请）', 2,
              '事假（疫情）', 0,
              '病假', 0,
              '事假', 0,
+             '早退', 3,
              );
 open (IN, "< rollcall.txt") or die;
 my @data;
@@ -55,6 +56,7 @@ foreach (@data) {
     my $strip = 0;
     my $shijia = 0;
     my $bingjia = 0;
+    my $zaotui = 0;
     my $num = $num0;
     my @info = split m/\s+/;
     my ($id, $name, $class, @info1) = @info;
@@ -67,13 +69,15 @@ foreach (@data) {
         my ($day, $eq) = split "-";
         next if $eq eq '事假（疫情）';#按照教务处要求，疫情不做考虑
         $score = $score - (100 / $num) if $event{$eq} == 1; # 扣分
+        $score = $score - (100 / $num) * 0.5 if $event{$eq} == 3; # 扣分
         $absence++ if $event{$eq} == 1;
         $strip++ if $event{$eq} == 2;
         $shijia++ if $eq eq '事假';
         $bingjia++ if $eq eq '病假';
+        $zaotui++ if $eq eq '早退';
     }
     $score = int ($score + 0.5);
-    print OUT "$id $name $class 缺勤 $absence 次, 事假 $shijia 次, 病假 $bingjia 次, 考勤分数为 $score\n" if $absence + $bingjia + $shijia > 0;
+    print OUT "$id $name $class 缺勤 $absence 次, 早退 $zaotui 次, 事假 $shijia 次, 病假 $bingjia 次, 考勤分数为 $score\n" if $absence + $bingjia + $shijia + $zaotui> 0;
     print OUT "$id $name $class 需要补假条 $strip 次\n" if $strip > 0;
 }
 print OUT "其余同学100分\n";
