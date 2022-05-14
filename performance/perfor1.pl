@@ -34,6 +34,7 @@ foreach my $file (glob "../list/*_official.csv") {
                 $record = "$record 60 60 60";
             }else{
                 $score = int($score * $factors{$i - 3} + 0.5);
+                $score = 70 if $score < 70;
                 $record = "$record $score";
             }
         }
