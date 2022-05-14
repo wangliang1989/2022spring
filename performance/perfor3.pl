@@ -15,7 +15,7 @@ foreach my $file (glob "../list/*_official.csv") {
     }
     close(IN);
     my %records;
-    open (IN, "< ../homework/${class}_record.csv") or die;
+    open (IN, "< ../homework/${class}_record.txt") or die;
     foreach (<IN>) {
         #2130612001 刘仙华 21电子1 100 99 100 100.100 100.100.95
         my ($id, $name, undef, undef, undef, @scores) = split m/\s+/;
