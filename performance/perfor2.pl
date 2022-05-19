@@ -6,12 +6,14 @@ use warnings;
 foreach my $file (glob "../list/*_official.csv") {
     my ($class) = (split m/\//, $file)[-1];
     ($class) = split '_', $class;
+    my %xiugai;
     my %students;
     open (IN, "< $file") or die $file;
     foreach (<IN>) {
         # 是否补修,电子邮箱,学号,姓名,性别,学院,年级,专业,班级,学生标记,辅修标记,是否重修,是否自修,手机号码
         my @info = split ",";
         $students{$info[2]} = "$info[2] $info[3] $info[8]" unless $_ =~ '姓名';
+        $xiugai{$info[3]} = $info[2] unless $_ =~ '姓名';
     }
     close(IN);
     my %medians;
@@ -23,7 +25,11 @@ foreach my $file (glob "../list/*_official.csv") {
         foreach (<IN>) {
             #刘仙华 2130612001 4 1653002380 95
             my ($name, $id, $num, $origin, undef) = split m/\s+/;
-            next unless grep{$_ eq $id} keys %students;
+            unless (defined($students{$id})) {
+                print "$name $id $xiugai{$name}\n" if (defined($xiugai{$name}));
+                $id = $xiugai{$name} if (defined($xiugai{$name}));
+            }
+            next unless defined($students{$id});
             next unless $num > 2 and $num < 10;
             die $num unless defined ($medians{$num});
             my ($time) = origin2sec($origin);
