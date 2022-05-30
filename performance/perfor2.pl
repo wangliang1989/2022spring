@@ -26,7 +26,7 @@ foreach my $file (glob "../list/*_official.csv") {
             #刘仙华 2130612001 4 1653002380 95
             my ($name, $id, $num, $origin, undef) = split m/\s+/;
             unless (defined($students{$id})) {
-                print "$name $id $xiugai{$name}\n" if (defined($xiugai{$name}));
+                #print "$name $id $xiugai{$name}\n" if (defined($xiugai{$name}));
                 $id = $xiugai{$name} if (defined($xiugai{$name}));
             }
             next unless defined($students{$id});
