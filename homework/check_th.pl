@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $th = 4;
+my $th = 6;
 my ($week) = @ARGV;
 die unless defined $week;
 my $dir = "/Users/liang/坚果云/作业上交/$week";

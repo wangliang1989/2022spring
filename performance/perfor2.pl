@@ -36,6 +36,7 @@ foreach my $file (glob "../list/*_official.csv") {
             my $score = int(85 + ($medians{$num} - $time) / 43200 + 0.5);
             $score = 95 if $time <= $top_line{$num} and $score < 95;
             $score = 100 if $score > 100;
+            $score = 65 if $score < 65;
             if (defined($records{"$id $num"})) {
                 $records{"$id $num"} = $score if $records{"$id $num"} < $score;
             }else{
