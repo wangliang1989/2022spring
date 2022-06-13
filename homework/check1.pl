@@ -2,16 +2,19 @@
 use strict;
 use warnings;
 
-my ($week) = @ARGV;
-die unless defined $week;
-my $dir = "/Users/liang/坚果云/作业上交/$week";
-die unless -d $dir;
 my @review;
-foreach (glob "$dir/*") {
-    next if $_ =~ '.xlsx';
-    my ($zuoye) = (split m/\//)[-1];
-    my ($id) = split '-', $zuoye;
-    push @review, $id;
+foreach my $week (@ARGV) {
+    die unless defined $week;
+    my $dir = "/Users/liang/坚果云/作业上交/$week";
+    die unless -d $dir;
+    foreach (glob "$dir/*") {
+        next if $_ =~ '.xlsx';
+        my ($zuoye) = (split m/\//)[-1];
+        my ($id, $num) = split '-', $zuoye;
+        push @review, $id;
+        my ($a) = is_number($num);
+        print "$zuoye $num\n" if $a == 1;
+    }
 }
 my %classes;
 my @data;
@@ -27,8 +30,10 @@ foreach (glob "作业成绩*") {
     }
     close(IN);
 }
+system "date";
+my %check_num;
 open (OUT, "> 本科作业成绩检查.csv") or die;
-print OUT "学号,姓名,班级,已改数,未改数,合计(此列小于6者不可参加考试),分数极低数量(此列大于0者期末成绩影响很大)\n";
+print OUT "学号,姓名,班级,已改数,未改数,合计(此列小于6者不可参加考试),分数为0的数量(此列大于0者期末成绩影响很大)\n";
 foreach my $key (sort {$a cmp $b} keys %classes) {
     foreach (@data) {
         my ($id, $name, $class, @info) = split m/\s+/;
@@ -42,12 +47,23 @@ foreach my $key (sort {$a cmp $b} keys %classes) {
             $bl++ if $_ eq $id;
         }
         my $all = $i + $bl;
-        print OUT "$id,$name,$class,$i,$bl,$all,$j\n"
+        print OUT "$id,$name,$class,$i,$bl,$all,$j\n";
+        next if $all >= 6;
+        print "$id $name $class $all\n";
+        $check_num{$class} = 0 unless defined($check_num{$class});
+        $check_num{$class}++;
     }
 }
 close(OUT);
-print "1. 作业成绩没有问题，平时成绩就不会有问题\n";
-print "2. 红色意味着你所交的作业数量不足6次，不可参加考试\n";
-print "3. 黄色意味着你的作业成绩里有极度低的分数，需要重视\n";
-print "4. 如果是我统计有误，请与我QQ联系，截止是6月13日\n";
-print "5. 联系时，不必发“你好，谢谢”之类的，直接说自己的学号和问题\n";
+foreach (sort {$a cmp $b} keys %check_num) {
+    print "$_ $check_num{$_}\n"
+}
+sub is_number {
+    my $in = shift;
+    my $reg1 = qr/^-?\d+(\.\d+)?$/;
+    my $reg2 = qr/^-?0(\d+)?$/;
+    my $out = 0;
+    $out = 1 unless ($in =~ $reg1 && $in !~ $reg2);
+    return $out;
+    #是数字为0，不是数字为1
+}
