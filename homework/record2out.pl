@@ -2,6 +2,9 @@
 use strict;
 use warnings;
 
+open (IN, "< panduanti.txt") or die;
+my @panduan = <IN>;
+close(IN);
 foreach (glob "../list/*_official.csv") {
     my ($name) = (split m/\//)[-1];
     ($name) = split '_', $name;
@@ -25,6 +28,22 @@ foreach (glob "../list/*_official.csv") {
         }
         if (defined($data[0])) {
             my $score = join(' ', @data);
+            if ($name eq '应电') {
+                foreach my $i (1, 2, 3, 4, 5) {
+                    foreach (@panduan) {
+                        #江金璐 2141327042 21应电班 5 100
+                        my ($name2, $id2, $class2, $i2, $score2) = split m/\s+/;
+                        $score = "$score $score2" if $id2 eq $id and $i == $i2;
+                    }
+                }
+                $score = "$score 100";
+            }
+            my @fenshu = split m/\s+/, $score;
+            my $meijiao = 9 - @fenshu;
+            while ($meijiao > 0) {
+                $score = "$score -1";
+                $meijiao = $meijiao - 1;
+            }
             print OUT "$_ $score\n";
         }else{
             print OUT "$_\n";
