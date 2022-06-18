@@ -18,13 +18,13 @@ foreach my $week (@ARGV) {
 }
 my %classes;
 my @data;
-foreach (glob "作业成绩*") {
-    next if $_ =~ '应电';
+foreach (glob "作业成绩_*") {
     open (IN, "< $_") or die;
     foreach (<IN>) {
         next if $_ =~ '姓名';
         chomp;
-        my ($id, $name, $class) = split m/\s+/;
+        my @info = split ',';
+        my $class = $info[3];
         $classes{$class} = 0;
         push @data, $_;
     }
@@ -32,22 +32,24 @@ foreach (glob "作业成绩*") {
 }
 system "date";
 my %check_num;
-open (OUT, "> 本科作业成绩检查.csv") or die;
-print OUT "学号,姓名,班级,已改数,未改数,合计(此列小于6者不可参加考试),分数为0的数量(此列大于0者期末成绩影响很大)\n";
+open (OUT, "> 作业数量检查.csv") or die;
+print "1. 正常情况“合计”应该是9\n";
+print "2. 未改数是程序自动算的，可能因为学生命名文件的原因，造成统计数量不对\n";
+print OUT "学号,姓名,班级,已改数,未改数,合计\n";
 foreach my $key (sort {$a cmp $b} keys %classes) {
     foreach (@data) {
-        my ($id, $name, $class, @info) = split m/\s+/;
+        my ($xuhao, $id, $name, $class, @info) = split ',';
         next unless $class eq $key;
-        my ($i, $j, $bl)= (0, 0, 0);
+        my ($i, $bl)= (0, 0);
         foreach (@info) {
-            $i++ if $_ >= 0;
-            $j++ if $_ == 0;
+            $i++ unless $_ eq '未交';
         }
+        $i--;
         foreach (@review) {
             $bl++ if $_ eq $id;
         }
         my $all = $i + $bl;
-        print OUT "$id,$name,$class,$i,$bl,$all,$j\n";
+        print OUT "$id,$name,$class,$i,$bl,$all\n";
         next if $all >= 6;
         print "$id $name $class $all\n";
         $check_num{$class} = 0 unless defined($check_num{$class});
