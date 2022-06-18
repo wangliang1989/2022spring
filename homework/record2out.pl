@@ -13,8 +13,7 @@ foreach (glob "../list/*_official.csv") {
     open (IN, "< ${name}_record.txt") or die "cannot open ${name}_record.txt";
     my @record = <IN>;
     close(IN);
-    open (OUT, "> 作业成绩_$name.csv") or die;
-    print OUT "学号,姓名,班级,1,2,3,4,5,6,7,8,9,\n";
+    my @out;
     foreach (@students) {
         my ($id) = split m/\s+/;
         my @data;
@@ -44,10 +43,23 @@ foreach (glob "../list/*_official.csv") {
                 $score = "$score -1";
                 $meijiao = $meijiao - 1;
             }
-            print OUT "$_ $score\n";
+            push @out, "$_ $score";
         }else{
-            print OUT "$_\n";
+            push @out, "$_\n";
         }
+    }
+    open (OUT, "> 作业成绩_$name.csv") or die;
+    print OUT "学号,姓名,班级,1,2,3,4,5,6,7,8,9\n";
+    foreach (@out) {
+        my @info = split m/\s+/;
+        my $record = "$info[0] $info[1] $info[2]";
+        my $i = 0;
+        foreach (@info) {
+            $i++;
+            next if $i < 4;
+            $record = "$record $_";
+        }
+        print OUT "$record\n";
     }
     close(OUT);
 }
