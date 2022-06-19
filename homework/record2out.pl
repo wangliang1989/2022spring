@@ -30,8 +30,8 @@ foreach (glob "../list/*_official.csv") {
             if ($name eq '应电') {
                 foreach my $i (1, 2, 3, 4, 5) {
                     foreach (@panduan) {
-                        #江金璐 2141327042 21应电班 5 100
-                        my ($name2, $id2, $class2, $i2, $score2) = split m/\s+/;
+                        #2141327042 5 100
+                        my ($id2, $i2, $score2) = split m/\s+/;
                         $score = "$score $score2" if $id2 eq $id and $i == $i2;
                     }
                 }
