@@ -18,7 +18,7 @@ foreach my $file (glob "../list/*_official.csv") {
     open (IN, "< ../homework/${class}_record.txt") or die;
     foreach (<IN>) {
         #2130612001 刘仙华 21电子1 100 99 100 100.100 100.100.95
-        my ($id, $name, undef, undef, undef, @scores) = split m/\s+/;
+        my ($id, undef, undef, @scores) = split m/\s+/;
         foreach (@scores) {
             my (undef, $score) = split m/\./;
             $score = 85 unless defined($score);

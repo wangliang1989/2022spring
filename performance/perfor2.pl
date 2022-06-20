@@ -50,7 +50,7 @@ foreach my $file (glob "../list/*_official.csv") {
         print OUT "$students{$id}";
         foreach my $num (3, 4, 5, 6, 7, 8, 9) {
             foreach (keys %records) {
-                print OUT " $records{$_}" if ($_ eq "$id $num")
+                print OUT " $records{$_}" if ($_ eq "$id $num");
             }
         }
         print OUT "\n";

@@ -22,18 +22,20 @@ foreach my $file (glob "../list/*_official.csv") {
         chomp;
         next if ($_ =~ '姓名');
         my @info = split m/\s+/;
-        my $record = "$info[0] $info[1] $info[2]";
+        my $record = "$info[1] $info[2] $info[3]";
         my $i = 0;
         foreach my $score (@info) {
             $i++;
-            next if $i < 4;
-            $score = int $score;
-            if ($score == -1) {
-                $record = "$record 40 40 40";
-            }elsif ($score == 0) {
-                $record = "$record 60 60 60";
+            next if $i < 5;
+            if ($i == 14) {
+                #$record = "$record $score";
+                next;
+            }
+            if ($score eq '未交' or $score eq '抄袭') {
+                $record = "$record 50";
             }else{
-                $score = int($score * $factors{$i - 3} + 0.5);
+                print "$record\n" unless defined($factors{$i - 4});
+                $score = int($score * $factors{$i - 4} + 0.5);
                 $score = 70 if $score < 70;
                 $record = "$record $score";
             }
@@ -51,8 +53,9 @@ sub get_factor{
         next if $_ =~ '姓名';
         #1810612066 鲍少兴 21电子1 100 95
         my @info = split m/\s+/;
-        next unless defined($info[$i + 2]);
-        $max = $info[$i + 2] if $info[$i + 2] > $max;
+        next unless defined($info[$i + 3]);
+        next if $info[$i + 3] eq '未交' or $info[$i + 3] eq '抄袭';
+        $max = $info[$i + 3] if $info[$i + 3] > $max;
     }
     close(IN);
     my $factor = 0;

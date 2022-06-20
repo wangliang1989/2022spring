@@ -23,7 +23,7 @@ foreach (glob "作业成绩_*") {
     foreach (<IN>) {
         next if $_ =~ '姓名';
         chomp;
-        my @info = split ',';
+        my @info = split m/\s+/;
         my $class = $info[3];
         $classes{$class} = 0;
         push @data, $_;
@@ -38,7 +38,7 @@ print "2. 未改数是程序自动算的，可能因为学生命名文件的原�
 print OUT "学号,姓名,班级,已改数,未改数,合计\n";
 foreach my $key (sort {$a cmp $b} keys %classes) {
     foreach (@data) {
-        my ($xuhao, $id, $name, $class, @info) = split ',';
+        my ($xuhao, $id, $name, $class, @info) = split m/\s+/;
         next unless $class eq $key;
         my ($i, $bl)= (0, 0);
         foreach (@info) {
@@ -50,7 +50,7 @@ foreach my $key (sort {$a cmp $b} keys %classes) {
         }
         my $all = $i + $bl;
         print OUT "$id,$name,$class,$i,$bl,$all\n";
-        next if $all >= 6;
+        next if $all >= 9;
         print "$id $name $class $all\n";
         $check_num{$class} = 0 unless defined($check_num{$class});
         $check_num{$class}++;

@@ -50,10 +50,10 @@ foreach (glob "../list/*_official.csv") {
     }
     open (OUT, "> 作业成绩_$name.csv") or die;
     my $j = 0;
-    print OUT "序号,学号,姓名,班级,1,2,3,4,5,6,7,8,9,总评\n";
+    print OUT "序号 学号 姓名 班级 1 2 3 4 5 6 7 8 9 总评\n";
     foreach (@out) {
         my @info = split m/\s+/;
-        my $record = "$info[0],$info[1],$info[2]";
+        my $record = "$info[0] $info[1] $info[2]";
         my $i = 0;
         my $mean = 0;
         foreach (@info) {
@@ -65,11 +65,11 @@ foreach (glob "../list/*_official.csv") {
             my $jilu = $_;
             $jilu = '抄袭' if $jilu eq -2;
             $jilu = '未交' if $jilu eq -1;
-            $record = "$record,$jilu";
+            $record = "$record $jilu";
         }
         $j++;
         $mean = int($mean / 9 + 0.5);
-        print OUT "$j,$record,$mean\n";
+        print OUT "$j $record $mean\n";
     }
     close(OUT);
 }
