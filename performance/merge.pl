@@ -23,7 +23,7 @@ foreach my $file (glob "../list/*_official.csv") {
     open (IN, "< perfor3_$class.txt") or die;
     my @d3 = <IN>;
     close(IN);
-    open (IN, "< perfor4.txt") or die;
+    open (IN, "< perfor4_$class.txt") or die;
     my @d5 = <IN>;
     close(IN);
     open (IN, "< performance.txt") or die;
@@ -36,11 +36,12 @@ foreach my $file (glob "../list/*_official.csv") {
     foreach (sort {$a <=> $b} keys %students) {
         my $word = $students{$_};
         my ($i1) = getscore($_, @d1); $word = "$word $i1"; ($word) = trim($word);
-        my ($i2) = getscore($_, @d2); $word = "$word $i2"; ($word) = trim($word);
+        my ($i2) = getscore($_, @d2); $word = "$word $i2 $i2"; ($word) = trim($word);
         my ($i3) = getscore($_, @d3); $word = "$word $i3"; ($word) = trim($word);
         my ($i4) = getscore($_, @d4); $word = "$word $i4"; ($word) = trim($word);
         my ($i5) = getscore($_, @d5); $word = "$word $i5"; ($word) = trim($word);
         print OUT "$word\n";
+        print "$word\n";
     }
     close(OUT);
 }

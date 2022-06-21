@@ -49,9 +49,12 @@ foreach my $file (glob "../list/*_official.csv") {
     foreach my $id (sort {$a <=> $b} keys %students) {
         print OUT "$students{$id}";
         foreach my $num (3, 4, 5, 6, 7, 8, 9) {
+            my $i = 0;
             foreach (keys %records) {
-                print OUT " $records{$_}" if ($_ eq "$id $num");
+                print OUT " $records{$_}" if $_ eq "$id $num";
+                $i++ if $_ eq "$id $num";
             }
+            print OUT " 65" if $i == 0;
         }
         print OUT "\n";
     }
