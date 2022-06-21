@@ -31,7 +31,7 @@ foreach my $file (glob "../list/*_official.csv") {
             foreach (keys %records) {
                 my ($id0, $num0) = split m/\s+/;
                 next unless $id =~ $id0 and $num =~ $num0;
-                $score = int(80 + $records{$_} / 5 + 0.5);
+                $score = 80 + $records{$_} / 5;
             }
             print OUT " $score";
         }

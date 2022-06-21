@@ -21,7 +21,8 @@ foreach my $file (glob "../list/*_official.csv") {
         my ($id, undef, undef, @scores) = split m/\s+/;
         foreach (@scores) {
             my (undef, $score) = split m/\./;
-            $score = 85 unless defined($score);
+            #$score = 85 unless defined($score);
+            next unless defined($score);
             if (defined($records{$id})) {
                 $records{$id} = "$records{$id} $score";
             }else{

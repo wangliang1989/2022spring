@@ -35,7 +35,7 @@ foreach my $file (glob "../list/*_official.csv") {
                 $record = "$record 50";
             }else{
                 print "$record\n" unless defined($factors{$i - 4});
-                $score = int($score * $factors{$i - 4} + 0.5);
+                $score = $score * $factors{$i - 4};
                 $score = 70 if $score < 70;
                 $record = "$record $score";
             }

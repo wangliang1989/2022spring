@@ -19,6 +19,7 @@ foreach my $file (glob "../list/*_official.csv") {
     my %medians;
     my %top_line;
     ($medians{$_}, $top_line{$_}) = get_th($_, keys %students) for (3, 4, 5, 6, 7, 8, 9);
+    ($medians{$_}, $top_line{$_}) = get_th($_, keys %students) for (101, 102, 103, 104, 105);
     my %records;
     foreach (glob "time/*.csv") {
         open (IN, "< $_") or die;
@@ -30,13 +31,19 @@ foreach my $file (glob "../list/*_official.csv") {
                 $id = $xiugai{$name} if (defined($xiugai{$name}));
             }
             next unless defined($students{$id});
-            next unless $num > 2 and $num < 10;
+            next if $num <= 2;
+            if ($class eq '应电') {
+                next if $num > 3 and $num < 100;
+            }else{
+                next if $num > 9 and $num < 100;
+            }
             die $num unless defined ($medians{$num});
             my ($time) = origin2sec($origin);
-            my $score = int(85 + ($medians{$num} - $time) / 43200 + 0.5);
+            my $score = 85 + ($medians{$num} - $time) / 43200;
             $score = 95 if $time <= $top_line{$num} and $score < 95;
             $score = 100 if $score > 100;
             $score = 65 if $score < 65;
+            $score = 80 if $score < 80 and $num > 100;
             if (defined($records{"$id $num"})) {
                 $records{"$id $num"} = $score if $records{"$id $num"} < $score;
             }else{
@@ -48,13 +55,23 @@ foreach my $file (glob "../list/*_official.csv") {
     open (OUT, "> perfor2_$class.txt") or die;
     foreach my $id (sort {$a <=> $b} keys %students) {
         print OUT "$students{$id}";
-        foreach my $num (3, 4, 5, 6, 7, 8, 9) {
+        foreach my $num (3, 4, 5, 6, 7, 8, 9, 101, 102, 103, 104, 105) {
             my $i = 0;
+            if ($class eq '应电') {
+                next if $num > 3 and $num < 100;
+            }else{
+                next if ($num > 9 and $num < 100) or $num == 105;
+            }
             foreach (keys %records) {
                 print OUT " $records{$_}" if $_ eq "$id $num";
+                print OUT " $records{$_}" if $_ eq "$id $num" and $num < 10;
                 $i++ if $_ eq "$id $num";
             }
-            print OUT " 65" if $i == 0;
+            if ($class eq '应电') {
+                print OUT " 70" if $i == 0;
+            }else{
+                print OUT " 60" if $i == 0;
+            }
         }
         print OUT "\n";
     }
