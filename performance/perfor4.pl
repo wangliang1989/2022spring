@@ -8,7 +8,8 @@ open (IN, "< ../homework/panduanti.txt") or die;
 foreach (<IN>) {
     chomp;
     my ($id, $num, $score) = split m/\s+/;
-    $records{"$id $num"} = $score;
+    $records{"$id $num"} = $score unless defined($records{"$id $num"});
+    $records{"$id $num"} = $score if $records{"$id $num"} < $score;
 }
 close(IN);
 foreach my $file (glob "../list/*_official.csv") {
