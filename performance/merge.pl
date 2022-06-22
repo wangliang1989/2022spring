@@ -63,7 +63,7 @@ foreach my $file (glob "../list/*_official.csv") {
         #@info = jiafen(5, @info);
         #print "$class\n";
         @info = jiafen(0.5, $id, @info);#####################################
-        @info = jiafen(1, $id, @info) if $class eq '21应电（专）';##############
+        #@info = jiafen(100, $id, @info) if $class eq '21应电（专）';##############
         my @paichu = get_paichu($id);
         my ($mean, $i, $l) = (0, 0, 0);
         print OUT "$id $name $class";

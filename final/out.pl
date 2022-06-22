@@ -12,10 +12,11 @@ foreach (glob "考试成绩_*.txt") {
     my %kaoqing;
     my %biaoxian;
     open (IN, "< $_") or die;
-    foreach (<IN>) {
-        next if $_ =~ '姓名';
-        my (undef, $id, $name, $class, $score) = split m/\s+/;
-$score = 0;
+    foreach my $info (<IN>) {
+        next if $info =~ '姓名';
+        $info =~ s/^\s+|\s+$//g;
+        my (undef, $id, $name, $class, $score) = split m/\s+/, $info;
+        $score = -12345 unless defined $score;
         push @ids, $id;
         $students{$id} = "$name $class";
         $kaoshi{$id} = $score;
@@ -52,7 +53,7 @@ $score = 0;
         my $score = int($kaoshi{$id} * 0.7 + $pingshi * 0.3);
         my $deadline = int((60 - $pingshi * 0.3) / 70 * 100 + 1);
         print OUT "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
-        print "$j $id $students{$id} $deadline\n";
+        print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n" if $score > 0 and $score < 60;
     }
     close(OUT);
 }
