@@ -32,6 +32,7 @@ foreach (glob "../list/*_official.csv") {
                     foreach (@panduan) {
                         #2141327042 5 100
                         my ($id2, $i2, $score2) = split m/\s+/;
+                        $score2 = 60 if $score2 < 60;
                         $score2 = 100 if $id == 2140615042 and $i2 >= 4;
                         $score2 = 100 if $id == 2140615022;
                         $score2 = 40 if $id == 2140615036 and $score2 < 40;
