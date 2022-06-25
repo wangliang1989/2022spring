@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 
-my $yibai = 0;
 foreach my $file (glob "../list/*_official.csv") {
     my ($class) = (split m/\//, $file)[-1];
     ($class) = split '_', $class;
@@ -47,6 +46,7 @@ foreach my $file (glob "../list/*_official.csv") {
     for (my $i = 2; $i <= 32; $i++) {
         $cishu = "$cishu $i";
     }
+    my $yibai = 0;
     print OUT "学号 姓名 班级 $cishu 总评\n";
     foreach (@result) {
         my ($id, $name, $class, @info) = split m/\s+/;
@@ -60,10 +60,12 @@ foreach my $file (glob "../list/*_official.csv") {
             last if @info == 32;
         }
         die unless @info == 32;
-        #@info = jiafen(5, @info);
-        #print "$class\n";
-        @info = jiafen(0.5, $id, @info);#####################################
-        #@info = jiafen(100, $id, @info) if $class eq '21应电（专）';##############
+        @info = bianfen(0.5, $id, @info);#####################################
+        @info = jiafen(3.5, @info) if $class =~ '机械';
+        @info = jiafen(3.5, @info) if $class =~ '数据';
+        @info = jiafen(4, @info) if $class =~ '工程' or $class =~ '电子';
+        @info = jiafen(3, @info) if $class =~ '制造';
+        @info = jiafen(5, @info) if $class eq '21应电（专）';##############
         my @paichu = get_paichu($id);
         my ($mean, $i, $l) = (0, 0, 0);
         print OUT "$id $name $class";
@@ -85,12 +87,12 @@ foreach my $file (glob "../list/*_official.csv") {
         }
         $mean = int($mean / $l + 0.5);
         print OUT " $mean\n";
-        print "$id $name $class $mean\n" if $mean > 99;
+        #print "$id $name $class $mean\n" if $mean > 99;
         $yibai++  if $mean > 99;
     }
     close(OUT);
+    print "$class $yibai\n";
 }
-print "$yibai\n";
 sub i_int {
     my @out;
     foreach (@_) {
@@ -99,6 +101,16 @@ sub i_int {
     return @out;
 }
 sub jiafen {
+    my ($jiafen, @in) = @_;
+    my @out;
+    foreach (@in) {
+        my $score = $_ + $jiafen;
+        $score = 100 if $score > 100;
+        push @out, $score;
+    }
+    return @out;
+}
+sub bianfen {
     my ($jiafen, $id, @in) = @_;
     my @out;
     my $i = 0;

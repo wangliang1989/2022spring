@@ -47,13 +47,18 @@ foreach (glob "考试成绩_*.txt") {
     open (OUT, "> 成绩_$class_name.txt") or die;
     my $j = 0;
     print OUT "序号 学号 姓名 班级 作业 表现 考勤 平时 考试 成绩\n";
+    my $lost = 0;
     foreach my $id (@ids) {
         $j++;
         my $pingshi = int($zuoye{$id} * 0.4 + $biaoxian{$id} * 0.4 + $kaoqing{$id} * 0.2 + 0.5);
         my $score = int($kaoshi{$id} * 0.7 + $pingshi * 0.3);
         my $deadline = int((60 - $pingshi * 0.3) / 70 * 100 + 1);
         print OUT "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
-        print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n" if $score > 0 and $score < 60;
+        next if $score < 0 or $score >= 60;
+        $lost++;
+        next if $kaoshi{$id} < 43;
+        print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
     }
     close(OUT);
+    print "$class_name $lost\n";
 }
