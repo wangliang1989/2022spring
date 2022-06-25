@@ -40,7 +40,7 @@ foreach (glob "考试成绩_*.txt") {
     open (IN, "< ../performance/课堂表现_$class_name.txt") or die;
     foreach (<IN>) {
         next if $_ =~ '姓名';
-        my ($id, $name, $class, @scores) = split m/\s+/;
+        my (undef, $id, $name, @scores) = split m/\s+/;
         $biaoxian{$id} = $scores[-1];
     }
     close(IN);
