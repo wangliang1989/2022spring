@@ -48,6 +48,7 @@ foreach my $file (glob "../list/*_official.csv") {
     }
     my $yibai = 0;
     print OUT "学号 姓名 班级 $cishu 总评\n";
+    my $xuhao = 0;
     foreach (@result) {
         my ($id, $name, $class, @info) = split m/\s+/;
         @info = (@info, @info);
@@ -68,7 +69,8 @@ foreach my $file (glob "../list/*_official.csv") {
         @info = jiafen(5, @info) if $class eq '21应电（专）';##############
         my @paichu = get_paichu($id);
         my ($mean, $i, $l) = (0, 0, 0);
-        print OUT "$id $name $class";
+        $xuhao++;
+        print OUT "$xuhao $id $name $class";
         @info = i_int(@info);
         foreach (@info) {
             $i++;
