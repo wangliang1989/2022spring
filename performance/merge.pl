@@ -47,7 +47,7 @@ foreach my $file (glob "../list/*_official.csv") {
         $cishu = "$cishu $i";
     }
     my $yibai = 0;
-    print OUT "学号 姓名 班级 $cishu 总评\n";
+    print OUT "序号 学号 姓名 班级 $cishu 总评\n";
     my $xuhao = 0;
     foreach (@result) {
         my ($id, $name, $class, @info) = split m/\s+/;
