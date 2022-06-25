@@ -51,7 +51,7 @@ foreach (glob "考试成绩_*.txt") {
     foreach my $id (@ids) {
         $j++;
         my $pingshi = int($zuoye{$id} * 0.4 + $biaoxian{$id} * 0.4 + $kaoqing{$id} * 0.2 + 0.5);
-        my $score = int($kaoshi{$id} * 0.7 + $pingshi * 0.3);
+        my $score = int($kaoshi{$id} * 0.7 + $pingshi * 0.3 + 0.5);
         my $deadline = int((60 - $pingshi * 0.3) / 70 * 100 + 1);
         print OUT "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
         next if $score < 0 or $score >= 60;
