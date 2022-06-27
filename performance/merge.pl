@@ -62,11 +62,7 @@ foreach my $file (glob "../list/*_official.csv") {
         }
         die unless @info == 32;
         @info = bianfen(0.5, $id, @info);#####################################
-        @info = jiafen(3.5, @info) if $class =~ '机械';
-        @info = jiafen(3.5, @info) if $class =~ '数据';
-        @info = jiafen(4, @info) if $class =~ '工程' or $class =~ '电子';
-        @info = jiafen(3, @info) if $class =~ '制造';
-        @info = jiafen(5, @info) if $class eq '21应电（专）';##############
+        @info = jiafen(5, @info);##############
         my @paichu = get_paichu($id);
         my ($mean, $i, $l) = (0, 0, 0);
         $xuhao++;
