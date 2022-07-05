@@ -62,9 +62,9 @@ foreach (glob "考试成绩_*.txt") {
         next if $score < 0;
         print OUT "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
         print OUT1 "$j $id $students{$id} $pingshi $kaoshi{$id} $score\n";
-        #print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n" if $score < 60;
+        print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n" if $score < 60;
         if ($kaoshi{$id} < 50 and $score >= 60) {
-            print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
+            #print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
         }
         if ($kaoshi{$id} >= 50 and $score <= 60) {
             #print "$j $id $students{$id} $zuoye{$id} $biaoxian{$id} $kaoqing{$id} $pingshi $kaoshi{$id} $score\n";
@@ -81,6 +81,6 @@ foreach (glob "考试成绩_*.txt") {
     close(OUT1);
     $all = $all + $lost;
     print "$class_name $lost $dd\n";
-    print "$class_name $a1 $a2 $a3 $a4 $a5\n";
+    #print "$class_name $a1 $a2 $a3 $a4 $a5\n";
 }
 print "$all $zonggong\n";
